@@ -27,8 +27,7 @@ export default function TikTokBoom() {
   const selectedNumsSet = new Set(selectedNums);
 
   const onStart = () => {
-    // setLuckyNum(getRandomArbitrary(1, 17));
-    setLuckyNum(3);
+    setLuckyNum(getRandomArbitrary(1, 17));
     setGameState("playing");
     setSelectedNums([]);
     setStartTime(new Date());
