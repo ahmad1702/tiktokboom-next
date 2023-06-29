@@ -18,16 +18,36 @@ model Example {
 }
 
 model Profile {
-    id          String        @id @default(cuid())
-    name        String
-    LeaderBoard LeaderBoard[]
-}
-
-model LeaderBoard {
     id        String   @id @default(cuid())
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
-    profile   Profile  @relation(fields: [profileId], references: [id])
+
+    name             String
+    email            String?
+    LeaderBoardEntry LeaderBoardEntry[]
+}
+
+model LeaderBoardEntry {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    seconds Float
+
+    profile   Profile @relation(fields: [profileId], references: [id])
     profileId String
-    seconds   Float
+
+    gameMode   GameMode @relation(fields: [gameModeId], references: [id])
+    gameModeId String
+}
+
+model GameMode {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+
+    numSquares Int
+    name       String
+
+    LeaderBoardEntry LeaderBoardEntry[]
 }
