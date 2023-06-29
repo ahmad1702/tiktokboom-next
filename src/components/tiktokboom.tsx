@@ -1,10 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import EmojiExplosion from "@/assets/animations/emoji-explosion.json";
 import { Button } from "@/components/ui/button";
 import { useInterval } from "@/hooks/useInterval";
 import { cn } from "@/lib/utils";
 import { differenceInMilliseconds } from "date-fns";
 import { Check, Clock, PauseIcon, Play } from "lucide-react";
-import { useState } from "react";
+import { Fragment, useState } from "react";
+import Lottie from "react-lottie";
+import MainLogo from "./main-logo";
 
 const nums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16] as const;
 function getRandomArbitrary(min: number, max: number) {
@@ -87,9 +90,24 @@ export default function TikTokBoom() {
           </div>
         )}
         {gameState === "lost" && startTime && endTime && (
-          <div className="absolute left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center space-y-4 rounded-xl bg-gradient-to-tr from-red-500 to-red-400 text-lg font-bold text-white">
-            You lost after {getFormattedSecondDiff(startTime, endTime)}...
-          </div>
+          <>
+            <div className="absolute left-3 top-3 z-10">
+              hi
+              <MainLogo />
+            </div>
+            <div className="pointer-events-none absolute left-0 top-0 z-10 flex h-full w-full flex-col items-center justify-center rounded-xl bg-gradient-to-tr from-red-500 to-red-400 text-lg font-bold text-white">
+              <Lottie
+                options={{
+                  animationData: EmojiExplosion,
+                  autoplay: true,
+                  loop: true,
+                }}
+              />
+              <div className="-translate-y-8">
+                You lost after {getFormattedSecondDiff(startTime, endTime)}...
+              </div>
+            </div>
+          </>
         )}
         {[...Array(Math.floor(nums.length / cl))].map((_, i) => {
           const startIndex = i * cl;
@@ -125,22 +143,24 @@ export default function TikTokBoom() {
                   }
                   setSelectedNums([...selectedNums, val]);
                 };
+                const key = `${i}-${j}`;
                 return (
-                  <Button
-                    onClick={onSpotClick}
-                    size="lg"
-                    className={cn(
-                      baseBtnClassName,
-                      "bg-gradient-to-tr from-blue-500 to-blue-400 text-white hover:from-blue-400 hover:to-blue-300"
-                    )}
-                    disabled={luckyNum === undefined}
-                    key={`${i}-${j}`}
-                    style={{
-                      opacity: luckyNum === undefined ? 0.2 : 1,
-                    }}
-                  >
-                    {val}
-                  </Button>
+                  <Fragment key={key}>
+                    <Button
+                      onClick={onSpotClick}
+                      size="lg"
+                      className={cn(
+                        baseBtnClassName,
+                        "bg-gradient-to-tr from-blue-500 to-blue-400 text-white hover:from-blue-400 hover:to-blue-300"
+                      )}
+                      disabled={luckyNum === undefined}
+                      style={{
+                        opacity: luckyNum === undefined ? 0.2 : 1,
+                      }}
+                    >
+                      {val}
+                    </Button>
+                  </Fragment>
                 );
               })}
             </div>
